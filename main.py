@@ -16,23 +16,23 @@ class Studying:
         self.y_values = []
 
     def study(self):
-        self.set_neural_numbers_on_second_layer()
-        self.set_neural_layers(self.pixels_number())
+        # self.set_neural_numbers_on_second_layer()
+        # self.set_neural_layers(self.pixels_number())
         block_form = self.image.to_blocks(self.block.width, self.block.height)
-        while self.current_error > 10000:
-            self.current_error = 0
-            self.epoch += 1
+        # while self.current_error > 10000:
+        #     self.current_error = 0
+        #     self.epoch += 1
 
-            for block in range(np.size(block_form, 0)):
-                y = np.matmul(block_form[block], self.first_layer)
-                block_on_second_layer = np.matmul(y, self.second_layer)
-                delta = np.subtract(block_on_second_layer, block_form[block])
-                self.modify_layer_weight(delta[block])
+        #     for block in range(np.size(block_form, 0)):
+        #         y = np.matmul(block_form[block], self.first_layer)
+        #         block_on_second_layer = np.matmul(y, self.second_layer)
+        #         delta = np.subtract(block_on_second_layer, block_form[block])
+        #         self.modify_layer_weight(delta[block])
 
-                self.learn_neurons_on_first_layer(block_form[block], delta)
-                self.adjustment_weight_on_second_layer(y, delta)
+        #         self.learn_neurons_on_first_layer(block_form[block], delta)
+        #         self.adjustment_weight_on_second_layer(y, delta)
 
-            print('Epoch ', self.epoch, '   ', 'error ', self.current_error)
+        #     print('Epoch ', self.epoch, '   ', 'error ', self.current_error)
 
         self.show_image(block_form)
 
@@ -126,18 +126,20 @@ class Image:
         for i in range(self.height // block_height):
             for y in range(block_height):
                 line = []
-                for j in range(blocks_in_line):
-                    for x in range(block_width):
+                for x in range(block_width):
+                    for j in range(blocks_in_line):
                         pixel = []
                         for color in range(3):
                             pixel.append(blocks[i, (y * block_width * 3) + (x * 3) + color])
+                            # pixel.append(blocks[i, (y * block_width * 3) + (x * 3) + color])
                         line.append(pixel)
                 array.append(line)
         return np.array(array)
 
     def restore_image(self, blocks, block_width, block_height):
         blocks = 1 * (self.to_image(blocks, block_width, block_height) + 1) / 2
-        return blocks.reshape(256, 256, 3)
+        # pry()
+        return blocks #.reshape(256, 256, 3)
 
 
 class Block:
