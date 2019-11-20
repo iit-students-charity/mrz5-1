@@ -42,7 +42,7 @@ def show(array_image):
 
 
 def read_image():
-    image = mpimg.imread("simple.png")
+    image = mpimg.imread("cat.png")
     image = (2.0 * image / 1.0) - 1.0
     return np.array(image)
 
@@ -77,9 +77,16 @@ def study():
             delta = x1 - block
             first_layer -= alpha(y) * np.matmul(np.matmul(block.transpose(), delta), second_layer.transpose())
             second_layer -= alpha(y) * np.matmul(y.transpose(), delta)
-            error = (delta * delta).sum()
-            current_error += error
+        for block in blocks():
+            y = block @ first_layer
+            x1 = y @ second_layer
+            delta = x1 - block
+            current_error += (delta * delta).sum()
+
         print('Epoch ', epoch, '   ', 'errors ', current_error)
+
+    Z = (np.size(first_layer, 0) * number_of_blocks()) / ((np.size(first_layer, 0) + number_of_blocks())* HIDDEN_LAYER_SIZE + 2),
+    print(' Z ', Z)
     return first_layer, second_layer
 
 
@@ -106,11 +113,11 @@ def compres():
     show(to_array(result.reshape(number_of_blocks(), INPUT_LAYER_SIZE), image_height, image_width))
 
 
-BLOCK_HEIGHT = 4
-BLOCK_WIDTH = 4
-HIDDEN_LAYER_SIZE = 16
+BLOCK_HEIGHT = 8
+BLOCK_WIDTH = 8
+HIDDEN_LAYER_SIZE = 64
 INPUT_LAYER_SIZE = BLOCK_HEIGHT * BLOCK_HEIGHT * 3
-ERROR_MAX = 10000.0
+ERROR_MAX = 250.0
 ARRAY_IMAGE = read_image()
 MAX_ALPHA = 0.0007
 
